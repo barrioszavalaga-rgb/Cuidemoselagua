@@ -502,6 +502,48 @@
             touch-action: none;
         }
 
+        #zonaPersecucion::before {
+            content: "";
+            position: absolute;
+            z-index: 0;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 72px 24px at 18% 22%, rgba(255, 255, 255, .9) 0 55%, transparent 56%),
+                radial-gradient(ellipse 92px 28px at 72% 18%, rgba(255, 255, 255, .82) 0 55%, transparent 56%),
+                radial-gradient(ellipse 58px 20px at 48% 36%, rgba(255, 255, 255, .75) 0 55%, transparent 56%),
+                radial-gradient(ellipse 82% 58% at 18% 108%, #166534 0 56%, transparent 57%),
+                radial-gradient(ellipse 90% 62% at 82% 112%, #15803d 0 57%, transparent 58%),
+                linear-gradient(180deg, #38bdf8 0%, #bae6fd 62%, #bbf7d0 100%);
+            transition: opacity 1s ease;
+        }
+
+        #zonaPersecucion.juego-ganado::before {
+            opacity: 1;
+        }
+
+        #zonaPersecucion::after {
+            content: "¡GANASTE!";
+            position: absolute;
+            z-index: 3;
+            top: 22%;
+            left: 50%;
+            color: #166534;
+            font-size: clamp(30px, 7vw, 52px);
+            font-weight: 900;
+            text-shadow: 0 3px 0 rgba(255, 255, 255, .9), 0 6px 14px rgba(22, 101, 52, .25);
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(.85);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        #zonaPersecucion.juego-ganado::after {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
         .nube-fondo {
             position: absolute;
             z-index: 0;
@@ -1076,6 +1118,8 @@
                 return;
             }
 
+            zona.classList.remove("juego-ganado");
+
             if (juego) {
                 clearInterval(juego.reloj);
                 cancelAnimationFrame(juego.animacion);
@@ -1265,12 +1309,18 @@
 
         function hayChoqueConObstaculo() {
 
+            var hitbox = {
+                x: juego.x + 12,
+                y: juego.y + 8,
+                ancho: 48,
+                alto: 32
+            };
             return juego.obstaculos.some(function (obstaculo) {
                 var ancho = Number.parseFloat(getComputedStyle(obstaculo.elemento).width);
-                return juego.x < obstaculo.x + ancho &&
-                    juego.x + 72 > obstaculo.x &&
-                    juego.y < obstaculo.y + Number.parseFloat(obstaculo.elemento.style.height) &&
-                    juego.y + 48 > obstaculo.y;
+                return hitbox.x < obstaculo.x + ancho &&
+                    hitbox.x + hitbox.ancho > obstaculo.x &&
+                    hitbox.y < obstaculo.y + Number.parseFloat(obstaculo.elemento.style.height) &&
+                    hitbox.y + hitbox.alto > obstaculo.y;
             });
 
         }
@@ -1288,6 +1338,7 @@
 
             juego.activo = false;
             clearInterval(juego.reloj);
+            document.getElementById("zonaPersecucion").classList.toggle("juego-ganado", gano);
             document.getElementById("estadoJuego").textContent = gano
                 ? "🌊 ¡Ganaste! La gota llegó a salvo."
                 : "☁️ ¡La nube te alcanzó! Inténtalo otra vez.";
