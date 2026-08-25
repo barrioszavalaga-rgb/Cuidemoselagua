@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>¡Cada Gota Cuenta!</title>
+
+    <style>
+        :root {
+            --azul-profundo: #064e6b;
+            --azul: #0e9fc0;
+            --azul-claro: #e0f7fa;
+            --verde: #14966b;
+            --verde-oscuro: #087443;
+            --tinta: #17324d;
+            --blanco: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+            background:
+                radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.8) 0 2px, transparent 3px),
+                radial-gradient(circle at 82% 35%, rgba(255, 255, 255, 0.55) 0 3px, transparent 4px),
+                radial-gradient(circle at 45% 80%, rgba(14, 159, 192, 0.12) 0 36px, transparent 37px),
+                linear-gradient(135deg, #c9f1f0 0%, #e0f7fa 48%, #dff7f4 100%);
+            background-size: 170px 170px, 230px 230px, 300px 300px, auto;
+            text-align: center;
+            color: var(--tinta);
+            line-height: 1.6;
+        }
+
+        header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #064e6b 0%, #087ea4 58%, #0d9488 100%);
+            color: var(--blanco);
+            padding: 64px 20px 58px;
+            box-shadow: 0 8px 24px rgba(7, 89, 133, 0.25);
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            left: -5%;
+            right: -5%;
+            bottom: -35px;
+            height: 70px;
+            background: #dff7f4;
+            border-radius: 50% 50% 0 0;
+        }
+
+        header h1 {
+            position: relative;
+            z-index: 1;
+            font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+            font-size: clamp(42px, 8vw, 78px);
+            letter-spacing: 0;
+            font-weight: 900;
+            margin: 10px;
+            background: linear-gradient(90deg, #7dd3fc, #a7f3d0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            position: relative;
+            z-index: 1;
+            font-size: 20px;
+            margin: 12px auto 0;
+            max-width: 600px;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            background: rgba(4, 63, 86, 0.96);
+            padding: 14px 20px;
+            box-shadow: 0 4px 14px rgba(7, 89, 133, 0.18);
+        }
+
+        nav a {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin: 4px 8px;
+            padding: 8px 12px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 20px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+        }
+
+        section {
+            max-width: 980px;
+            margin: 52px auto;
+            padding: 25px 20px;
+        }
+
+        h2 {
+            color: var(--azul-profundo);
+            font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+            font-size: clamp(26px, 4vw, 34px);
+            font-weight: 900;
+            margin-bottom: 24px;
+        }
+
+        .caja {
+            background: rgba(255, 255, 255, 0.88);
+            padding: 30px;
+            margin: 20px auto;
+            border: 1px solid rgba(14, 159, 192, 0.2);
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(7, 89, 133, 0.12);
+        }
+
+        #soluciones .caja {
+            background:
+                linear-gradient(120deg, rgba(224, 247, 250, 0.96), rgba(255, 255, 255, 0.92)),
+                repeating-linear-gradient(45deg, transparent 0 18px, rgba(14, 159, 192, 0.04) 18px 20px);
+            border: 2px solid rgba(14, 159, 192, 0.2);
+            border-radius: 24px 10px 24px 10px;
+            box-shadow: 0 14px 32px rgba(7, 89, 133, 0.14);
+        }
+
+        #soluciones .caja p {
+            margin: 14px 0;
+            padding: 16px 20px;
+            color: var(--azul-profundo);
+            background: rgba(255, 255, 255, 0.7);
+            border-left: 6px solid var(--azul);
+            border-radius: 8px 16px 16px 8px;
+            font-size: 22px;
+            font-weight: 900;
+            text-align: left;
+            box-shadow: 0 4px 12px rgba(7, 89, 133, 0.08);
+        }
+
+        #soluciones .caja {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        #soluciones .caja p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: min(280px, 100%);
+            min-height: 112px;
+            margin: 10px;
+            border-left: 1px solid rgba(14, 159, 192, 0.2);
+            border: 1px solid rgba(14, 159, 192, 0.2);
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 24px rgba(7, 89, 133, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #soluciones .caja p:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 30px rgba(7, 89, 133, 0.17);
+        }
+
+        #problema .caja p {
+            margin: 18px 0;
+            color: var(--azul-profundo);
+            font-size: 23px;
+            line-height: 1.5;
+        }
+
+        .contenedor {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tarjeta {
+            background: rgba(255, 255, 255, 0.92);
+            width: min(250px, 100%);
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid rgba(14, 159, 192, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 10px 24px rgba(7, 89, 133, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .tarjeta:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 30px rgba(7, 89, 133, 0.17);
+        }
+
+        .tarjeta h3 {
+            color: var(--azul-profundo);
+        }
+
+        .mision {
+            text-align: left;
+            font-size: 22px;
+        }
+
+        #mision h2 {
+            font-size: clamp(32px, 5vw, 42px);
+        }
+
+        .mision > p:not(.globo-texto) {
+            font-size: 25px;
+            font-weight: 900;
+        }
+
+        .mision label {
+            padding: 17px;
+            margin: 12px 0;
+            font-size: 21px;
+        }
+
+        .mision input {
+            width: 22px;
+            height: 22px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .mision progress {
+            height: 30px;
+            margin-top: 12px;
+        }
+
+        .mision #progresoTexto {
+            font-size: 25px;
+            text-align: center;
+        }
+
+        .globo-texto {
+            position: relative;
+            display: inline-block;
+            max-width: 90%;
+            margin: 0 0 18px;
+            padding: 14px 20px;
+            color: var(--azul-profundo);
+            background: #ffffff;
+            border: 2px solid #9bd8e8;
+            border-radius: 20px;
+            font-size: 20px;
+            font-weight: 900;
+            box-shadow: 0 5px 12px rgba(7, 89, 133, 0.1);
+        }
+
+        .globo-texto::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 28px;
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border-right: 2px solid #9bd8e8;
+            border-bottom: 2px solid #9bd8e8;
+            transform: rotate(45deg);
+        }
+
+        .mision label {
+            display: block;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            background: var(--azul-claro);
+            cursor: pointer;
+            transition: background 0.2s, padding-left 0.2s;
+        }
+
+        .mision label:has(input:checked) {
+            background: #d5f5e3;
+            color: var(--verde-oscuro);
+            font-weight: bold;
+            padding-left: 18px;
+        }
+
+        progress {
+            width: 100%;
+            height: 22px;
+            accent-color: #00a86b;
+        }
+
+        .quiz-opciones button {
+            margin: 8px;
+            font-size: 16px;
+            border-radius: 6px;
+        }
+
+        #quiz .caja {
+            max-width: 760px;
+            padding: 38px 30px;
+            border: 2px solid rgba(2, 132, 199, 0.2);
+            border-radius: 8px;
+        }
+
+        #pregunta {
+            margin: 0 auto 24px;
+            padding: 22px 24px;
+            color: var(--blanco);
+            background: linear-gradient(135deg, var(--azul-profundo), var(--azul));
+            border: 4px solid #7dd3fc;
+            border-radius: 18px;
+            box-shadow: 0 8px 0 rgba(6, 78, 107, 0.18), 0 12px 24px rgba(7, 89, 133, 0.16);
+            font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+            font-size: 31px;
+            font-weight: 900;
+            line-height: 1.25;
+            animation: destacarPregunta 0.45s ease-out;
+        }
+
+        #pregunta::before {
+            content: "💧 ";
+        }
+
+        @keyframes destacarPregunta {
+            0% { transform: scale(0.96); opacity: 0.35; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        #resultado,
+        #mensaje,
+        #respuestaQuiz,
+        #progresoTexto,
+        #porcentajeAciertos {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--azul-profundo);
+        }
+
+        #barraAciertos {
+            display: block;
+            width: 100%;
+            height: 26px;
+            margin: 18px auto 8px;
+            accent-color: var(--verde);
+        }
+
+        button {
+            background: var(--verde);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+            font-size: 17px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #087443;
+            transition: transform 0.15s, background 0.15s;
+        }
+
+        button:hover {
+            background: #0f7f5b;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 0 #087443;
+        }
+
+        input {
+            padding: 12px;
+            font-size: 18px;
+            width: 150px;
+            border: 2px solid #9bd8e8;
+            border-radius: 8px;
+        }
+
+        .calculadora {
+            max-width: 360px;
+            margin: 0 auto;
+            padding: 22px;
+            background: #dff7f4;
+            border-radius: 18px;
+            border: 2px solid #9bd8e8;
+        }
+
+        .calculadora #minutos {
+            display: block;
+            width: 100%;
+            margin-bottom: 16px;
+            padding: 14px;
+            background: white;
+            color: var(--azul-profundo);
+            font-size: 28px;
+            font-weight: 900;
+            text-align: right;
+        }
+
+        .teclado {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 9px;
+        }
+
+        .teclado button {
+            padding: 12px;
+            background: var(--azul-profundo);
+            font-size: 20px;
+            box-shadow: 0 3px 0 #043c5c;
+        }
+
+        .teclado button:hover {
+            background: var(--azul);
+        }
+
+        .teclado .accion {
+            background: #d97706;
+            box-shadow: 0 3px 0 #a34f04;
+        }
+
+        .teclado .accion:hover {
+            background: #b45309;
+        }
+
+        .boton-calcular {
+            margin-top: 18px;
+            width: 100%;
+        }
+
+        #calculadora .caja > p:first-child {
+            color: var(--azul-profundo);
+            font-size: 25px;
+            font-weight: 900;
+        }
+
+        #calculadora #resultado {
+            margin-top: 24px;
+            font-size: 26px;
+            line-height: 1.3;
+        }
+
+        #mensaje.celebracion {
+            display: inline-block;
+            margin: 20px 0 0;
+            padding: 16px 24px;
+            color: #064e6b;
+            background: #e0f7fa;
+            border: 3px solid #0e9fc0;
+            border-radius: 18px;
+            box-shadow: 0 0 0 8px rgba(14, 159, 192, 0.12), 0 8px 18px rgba(7, 89, 133, 0.2);
+            animation: celebrar 0.7s ease-out;
+        }
+
+        #reto .caja > p:first-child {
+            color: var(--azul-profundo);
+            font-size: 27px;
+            font-weight: 900;
+        }
+
+        #reto #mensaje {
+            font-size: 25px;
+            line-height: 1.3;
+        }
+
+        #mensaje.juego-activo {
+            display: block;
+            margin: 26px auto 0;
+            padding: 18px;
+            color: var(--azul-profundo);
+            background: #eefcff;
+            border: 2px solid #8bd4e7;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .juego-instrucciones {
+            margin: 0 0 12px;
+            font-size: 18px;
+        }
+
+        #zonaPersecucion {
+            position: relative;
+            width: min(100%, 680px);
+            height: 330px;
+            margin: 14px auto;
+            overflow: hidden;
+            border: 4px solid var(--azul-profundo);
+            border-radius: 14px;
+            background:
+                url("e-transparente.png") left bottom / 110% 190% repeat-x,
+                url("a.jpeg") center / 100% 100% no-repeat;
+            box-shadow: inset 0 -12px 0 rgba(8, 116, 67, .2);
+            touch-action: none;
+        }
+
+        .nube-fondo {
+            position: absolute;
+            z-index: 0;
+            top: 24px;
+            left: 0;
+            width: 160px;
+            height: 116px;
+            background: url("nube-transparente.png") center / contain no-repeat;
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        .nube-fondo.nube-2 {
+            top: 92px;
+        }
+
+        .nube-fondo.nube-3 {
+            top: 42px;
+        }
+
+        .personaje-juego {
+            position: absolute;
+            z-index: 1;
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 28px;
+            line-height: 1;
+            user-select: none;
+        }
+
+        #jugador {
+            width: 72px;
+            height: 48px;
+            background: transparent;
+            box-shadow: none;
+            font-size: 0;
+        }
+
+        #jugador::before {
+            content: "";
+            position: absolute;
+            left: -24px;
+            top: -16px;
+            width: 120px;
+            height: 80px;
+            background: url("personaje-transparente.png") center / contain no-repeat;
+            pointer-events: none;
+        }
+
+        .obstaculo {
+            position: absolute;
+            z-index: 0;
+            width: 56px;
+            height: 58px;
+            border: 3px solid #9a3412;
+            border-radius: 8px 8px 3px 3px;
+            background: repeating-linear-gradient(135deg, #f97316 0 10px, #fed7aa 10px 18px);
+            box-shadow: 0 4px 0 rgba(154, 52, 18, .35);
+        }
+
+        .obstaculo.desde-arriba {
+            border-radius: 3px 3px 8px 8px;
+            box-shadow: 0 -4px 0 rgba(154, 52, 18, .35);
+        }
+
+        .obstaculo.grande {
+            width: 82px;
+        }
+
+        #estadoJuego {
+            min-height: 29px;
+            margin: 8px 0 0;
+            color: var(--azul-profundo);
+            font-size: 19px;
+        }
+
+        #reiniciarJuego {
+            padding: 10px 18px;
+            font-size: 15px;
+        }
+
+        .mensaje-final {
+            max-width: 100%;
+            margin: 40px 0 0;
+            padding: 58px 20px 64px;
+            background: linear-gradient(135deg, #064e6b, #087ea4 55%, #0d9488);
+            color: var(--blanco);
+            border-radius: 50% 50% 0 0 / 18% 18% 0 0;
+            box-shadow: 0 -10px 25px rgba(7, 89, 133, 0.18);
+        }
+
+        .mensaje-final h2 {
+            margin: 0 auto 12px;
+            color: #a7f3d0;
+            font-size: clamp(32px, 6vw, 54px);
+        }
+
+        .mensaje-final p {
+            max-width: 760px;
+            margin: 0 auto;
+            font-size: clamp(22px, 4vw, 30px);
+            font-weight: 900;
+            line-height: 1.35;
+        }
+
+        @keyframes celebrar {
+            0% { transform: scale(0.7) rotate(-4deg); opacity: 0; }
+            70% { transform: scale(1.08) rotate(2deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0); }
+        }
+
+        #resultado {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0077aa;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #064e6d, #087443);
+            color: white;
+            padding: 25px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 42px 14px 46px;
+            }
+
+            header h1 {
+                font-size: 34px;
+                line-height: 1.15;
+            }
+
+            header p {
+                font-size: 17px;
+            }
+
+            nav {
+                padding: 10px 6px;
+            }
+
+            nav a {
+                margin: 2px;
+                padding: 7px 8px;
+                font-size: 15px;
+            }
+
+            section {
+                margin: 30px auto;
+                padding: 18px 12px;
+            }
+
+            h2 {
+                font-size: 27px;
+                line-height: 1.2;
+            }
+
+            .caja {
+                padding: 22px 16px;
+            }
+
+            #soluciones .caja p {
+                padding: 14px 15px;
+                font-size: 19px;
+            }
+
+            #quiz .caja {
+                padding: 28px 16px;
+            }
+
+            #pregunta {
+                padding: 18px 15px;
+                font-size: 25px;
+            }
+
+            .quiz-opciones button {
+                font-size: 15px;
+                padding: 12px 16px;
+            }
+
+            .tarjeta {
+                width: 100%;
+                margin: 8px 0;
+            }
+
+            .mensaje-final {
+                padding: 48px 16px 54px;
+            }
+
+            footer {
+                padding: 22px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1> ¡CADA GOTA CUENTA!</h1>
+
+        <p>
+            Proyecto Eureka: aprendamos a cuidar el agua
+        </p>
+    </header>
+
+
+    <nav>
+        <a href="#problema">Problema</a>
+        <a href="#soluciones">Soluciones</a>
+        <a href="#calculadora">Calculadora</a>
+        <a href="#reto">Reto</a>
+        <a href="#mision">Mi misión</a>
+        <a href="#quiz">Quiz</a>
+    </nav>
+
+
+    <section id="problema">
+
+        <h2> El problema del desperdicio de agua</h2>
+
+        <div class="caja">
+
+            <p>
+                El agua es un recurso fundamental para la vida.
+                Sin embargo, muchas veces la desperdiciamos
+                dejando los grifos abiertos, tomando duchas
+                demasiado largas o ignorando las fugas.
+            </p>
+
+            <p>
+                Por eso debemos aprender a utilizar solamente
+                el agua que necesitamos.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <section>
+
+        <h2> Ejemplos de desperdicio</h2>
+
+        <div class="contenedor">
+
+            <div class="tarjeta">
+                <h3>🚿 Duchas largas</h3>
+                <p>
+                    Pasar demasiado tiempo en la ducha
+                    aumenta el consumo de agua.
+                </p>
+            </div>
+
+            <div class="tarjeta">
+                <h3>🦷 Grifo abierto</h3>
+                <p>
+                    Dejar correr el agua mientras nos
+                    cepillamos desperdicia agua.
+                </p>
+            </div>
+
+            <div class="tarjeta">
+                <h3>🔧 Fugas</h3>
+                <p>
+                    Una fuga puede provocar que el agua
+                    se pierda constantemente.
+                </p>
+            </div>
+
+            <div class="tarjeta">
+                <h3>🚗 Lavar con manguera</h3>
+                <p>
+                    Usar demasiada agua para lavar el auto
+                    desperdicia muchos litros.
+                </p>
+            </div>
+
+            <div class="tarjeta">
+                <h3>🌱 Regar de más</h3>
+                <p>
+                    Regar las plantas más de lo necesario
+                    desperdicia agua.
+                </p>
+            </div>
+
+            <div class="tarjeta">
+                <h3>🍽️ Lavar platos</h3>
+                <p>
+                    Dejar el grifo abierto mientras lavamos
+                    los platos hace que se pierda agua.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section id="soluciones">
+
+        <h2> ¿Cómo podemos cuidar el agua?</h2>
+
+        <div class="caja">
+
+            <p>✅ Cerrar el grifo cuando no lo estamos usando.</p>
+
+            <p>✅ Tomar duchas más cortas.</p>
+
+            <p>✅ Reparar las fugas.</p>
+
+            <p>✅ No jugar con el agua.</p>
+
+            <p>✅ Reutilizar agua cuando sea posible.</p>
+
+            <p>✅ Enseñar a otras personas a cuidar el agua.</p>
+
+            <p>✅ Cerrar bien los grifos después de usarlos.</p>
+
+            <p>✅ Avisar rápidamente cuando encontremos una fuga.</p>
+
+            <p>✅ Usar un vaso de agua para cepillarnos los dientes.</p>
+
+            <p>✅ Aprovechar el agua que sale mientras esperamos que se caliente.</p>
+
+            <p>✅ Lavar las frutas y verduras en un recipiente, en vez de dejar correr el grifo.</p>
+
+            <p>✅ Usar la lavadora y el lavavajillas cuando estén llenos.</p>
+
+            <p>✅ Regar las plantas por la mañana temprano o al atardecer.</p>
+
+            <p>✅ Utilizar una cubeta para lavar la bicicleta o el auto.</p>
+
+            <p>✅ No tirar basura, aceite ni productos químicos por el desagüe.</p>
+
+            <p>✅ Recoger agua de lluvia para regar las plantas.</p>
+
+            <p>✅ Elegir plantas que necesiten poca agua.</p>
+
+            <p>✅ Reducir el tiempo de la ducha y usar un temporizador.</p>
+
+        </div>
+
+    </section>
+
+
+    <section id="calculadora">
+
+        <h2> Calculadora de agua</h2>
+
+        <div class="caja">
+
+            <p>
+                ¿Cuántos minutos dejas abierto el grifo?
+            </p>
+
+            <div class="calculadora">
+                <input
+                    type="text"
+                    id="minutos"
+                    placeholder="0"
+                    readonly
+                >
+
+                <div class="teclado">
+                    <button onclick="agregarNumero(1)">1</button>
+                    <button onclick="agregarNumero(2)">2</button>
+                    <button onclick="agregarNumero(3)">3</button>
+                    <button onclick="agregarNumero(4)">4</button>
+                    <button onclick="agregarNumero(5)">5</button>
+                    <button onclick="agregarNumero(6)">6</button>
+                    <button onclick="agregarNumero(7)">7</button>
+                    <button onclick="agregarNumero(8)">8</button>
+                    <button onclick="agregarNumero(9)">9</button>
+                    <button class="accion" onclick="borrarNumero()">⌫</button>
+                    <button onclick="agregarNumero(0)">0</button>
+                    <button class="accion" onclick="limpiarNumero()">C</button>
+                </div>
+
+                <button class="boton-calcular" onclick="calcular()">
+                    CALCULAR
+                </button>
+            </div>
+
+            <p id="resultado"></p>
+
+        </div>
+
+    </section>
+
+
+    <section id="reto">
+
+        <h2> ¡Acepta el reto!</h2>
+
+        <div class="caja">
+
+            <p>
+                ¿Te comprometes a cuidar el agua?
+            </p>
+
+            <button onclick="iniciarRetoPersecucion()">
+                💧 ¡ME COMPROMETO!
+            </button>
+
+            <div id="mensaje" aria-live="polite"></div>
+
+        </div>
+
+    </section>
+
+
+    <section id="mision">
+
+        <h2> Mi misión para hoy</h2>
+
+        <div class="caja mision">
+
+            <p class="globo-texto">💬 ¡Cada pequeña acción ayuda al planeta!</p>
+            <p>Marca las acciones que ya realizaste:</p>
+
+            <label><input type="checkbox" onchange="actualizarProgreso()"> Cerré el grifo al cepillarme.</label>
+            <label><input type="checkbox" onchange="actualizarProgreso()"> Tomé una ducha corta.</label>
+            <label><input type="checkbox" onchange="actualizarProgreso()"> Revisé si había alguna fuga.</label>
+            <label><input type="checkbox" onchange="actualizarProgreso()"> Reutilicé agua.</label>
+
+            <progress id="barraProgreso" value="0" max="4"></progress>
+            <p id="progresoTexto">0 de 4 acciones completadas</p>
+
+        </div>
+
+    </section>
+
+
+    <section id="quiz">
+
+        <h2> Pon a prueba tus conocimientos</h2>
+
+        <div class="caja">
+
+            <p id="pregunta">Pregunta 1: ¿Qué acción ahorra más agua?</p>
+
+            <div class="quiz-opciones">
+                <button onclick="responderQuiz(0)">Cerrar el grifo</button>
+                <button onclick="responderQuiz(1)">Dejarlo abierto</button>
+                <button onclick="responderQuiz(1)">Jugar con agua</button>
+            </div>
+
+            <p id="respuestaQuiz"></p>
+
+            <progress id="barraAciertos" value="0" max="100" hidden></progress>
+            <p id="porcentajeAciertos" hidden></p>
+
+        </div>
+
+    </section>
+
+
+    <section class="mensaje-final">
+
+        <h2> ¡Tú puedes cambiar el mundo!</h2>
+
+        <p>
+            Cada gota que cuidas hoy ayuda a construir un océano más limpio mañana.
+        </p>
+
+    </section>
+
+
+    <footer>
+
+        <h3>💧 CADA GOTA CUENTA 💧</h3>
+
+        <p>
+            Proyecto de Ciencias Eureka
+        </p>
+
+        <p>
+            "Cuidar el agua es cuidar la vida."
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        function calcular() {
+
+            var minutos = document.getElementById("minutos").value;
+
+            if (minutos === "" || Number(minutos) <= 0) {
+
+                document.getElementById("resultado").innerHTML =
+                "⚠️ Primero escribe los minutos.";
+
+            } else {
+
+                var litros = minutos * 6;
+
+                document.getElementById("resultado").innerHTML =
+                "💧 Aproximadamente estás utilizando " +
+                litros +
+                " litros de agua.";
+
+            }
+
+        }
+
+
+        function agregarNumero(numero) {
+
+            var pantalla = document.getElementById("minutos");
+
+            if (pantalla.value === "0") {
+                pantalla.value = "";
+            }
+
+            pantalla.value += numero;
+
+        }
+
+
+        function borrarNumero() {
+
+            var pantalla = document.getElementById("minutos");
+            pantalla.value = pantalla.value.slice(0, -1);
+
+        }
+
+
+        function limpiarNumero() {
+
+            document.getElementById("minutos").value = "";
+            document.getElementById("resultado").textContent = "";
+
+        }
+
+
+        function iniciarRetoPersecucion() {
+
+            var mensaje = document.getElementById("mensaje");
+
+            mensaje.className = "juego-activo";
+            mensaje.innerHTML =
+                '<p class="juego-instrucciones">🏃 Mueve la gota arriba y abajo y supera 50 obstáculos para ganar.</p>' +
+                '<div id="zonaPersecucion" tabindex="0" aria-label="Zona del juego de obstáculos">' +
+                    '<div class="nube-fondo nube-1" aria-hidden="true"></div>' +
+                    '<div class="nube-fondo nube-2" aria-hidden="true"></div>' +
+                    '<div class="nube-fondo nube-3" aria-hidden="true"></div>' +
+                    '<div id="jugador" class="personaje-juego" aria-label="Gota de agua">💧</div>' +
+                '</div>' +
+                '<p id="estadoJuego">Obstáculos: 0/50</p>' +
+                '<button id="reiniciarJuego" type="button" onclick="iniciarJuego()">🔄 Jugar de nuevo</button>';
+
+            iniciarJuego();
+
+        }
+
+
+        var juego = null;
+
+        function iniciarJuego() {
+
+            var zona = document.getElementById("zonaPersecucion");
+            var jugador = document.getElementById("jugador");
+            var nubes = zona ? zona.querySelectorAll(".nube-fondo") : [];
+
+            if (!zona || !jugador) {
+                return;
+            }
+
+            if (juego) {
+                clearInterval(juego.reloj);
+                cancelAnimationFrame(juego.animacion);
+                cancelAnimationFrame(juego.animacionVictoria);
+                clearTimeout(juego.esperaVictoria);
+                clearTimeout(juego.cuentaVictoria);
+            }
+
+            zona.querySelectorAll(".obstaculo").forEach(function (obstaculo) {
+                obstaculo.remove();
+            });
+
+            juego = {
+                x: 24,
+                y: zona.clientHeight - 68,
+                distancia: 0,
+                nubesX: [zona.clientWidth + 20, zona.clientWidth + 300, zona.clientWidth + 580],
+                siguienteObstaculo: 220,
+                obstaculosSuperados: 0,
+                obstaculoNumero: 0,
+                obstaculos: [],
+                teclas: {},
+                activo: true,
+                esperaVictoria: null,
+                cuentaVictoria: null,
+                animacionVictoria: null,
+                ultimoTiempo: performance.now(),
+                reloj: null,
+                animacion: null
+            };
+
+            document.getElementById("estadoJuego").textContent = "Obstáculos: 0/50";
+            nubes.forEach(function (nube, indice) {
+                nube.style.top = (15 + indice * 65 + Math.random() * 35) + "px";
+                nube.style.transform = "translate(" + juego.nubesX[indice] + "px, 0)";
+            });
+            zona.focus();
+            dibujarJuego();
+            juego.animacion = requestAnimationFrame(actualizarJuego);
+
+        }
+
+
+        function actualizarJuego(marcaDeTiempo) {
+
+            if (!juego || !juego.activo) {
+                return;
+            }
+
+            var zona = document.getElementById("zonaPersecucion");
+            var nubes = zona.querySelectorAll(".nube-fondo");
+            var delta = Math.min((marcaDeTiempo - juego.ultimoTiempo) / 16, 2);
+            var velocidad = 5 * delta;
+            var limiteY = zona.clientHeight - 46;
+
+            juego.distancia += velocidad;
+            var desplazamientoFondo = juego.distancia * 0.05;
+            juego.nubesX.forEach(function (posicion, indice) {
+                juego.nubesX[indice] -= 1.5 * delta;
+                if (juego.nubesX[indice] < -150) {
+                    juego.nubesX[indice] = zona.clientWidth + 20 + indice * 220 + Math.random() * 80;
+                    nubes[indice].style.top = (15 + indice * 65 + Math.random() * 35) + "px";
+                }
+                nubes[indice].style.transform =
+                    "translate(" + juego.nubesX[indice] + "px, 0)";
+            });
+            zona.style.backgroundPosition = (-desplazamientoFondo) + "px bottom, center center";
+            var desplazamientoFondo = juego.distancia * 0.05;
+            zona.style.backgroundPosition = (-desplazamientoFondo) + "px bottom, center";
+            var desplazamientoFondo = Math.min(juego.distancia * 0.05, zona.clientWidth * 0.1);
+            zona.style.backgroundPosition = (-desplazamientoFondo) + "px bottom, center";
+
+            if (juego.teclas.ArrowUp || juego.teclas.w) juego.y -= velocidad;
+            if (juego.teclas.ArrowDown || juego.teclas.s) juego.y += velocidad;
+
+            juego.y = Math.max(0, Math.min(limiteY, juego.y));
+
+            if (juego.distancia >= juego.siguienteObstaculo &&
+                juego.obstaculoNumero < 50 &&
+                zona.querySelectorAll(".obstaculo").length < 4) {
+                crearObstaculo(zona);
+                juego.siguienteObstaculo += 140 + Math.random() * 100;
+            } else if (juego.distancia >= juego.siguienteObstaculo) {
+                juego.siguienteObstaculo += 140 + Math.random() * 100;
+            }
+
+            juego.obstaculos.forEach(function (obstaculo) {
+                obstaculo.x -= velocidad;
+                obstaculo.elemento.style.transform = "translate(" + obstaculo.x + "px, " + obstaculo.y + "px)";
+            });
+            juego.obstaculos = juego.obstaculos.filter(function (obstaculo) {
+                if (obstaculo.x < -50) {
+                    obstaculo.elemento.remove();
+                    juego.obstaculosSuperados++;
+                    if (juego.obstaculosSuperados >= 50) {
+                        prepararVictoria(zona);
+                    }
+                    return false;
+                }
+                return true;
+            });
+
+            if (!juego.activo) {
+                return;
+            }
+
+            dibujarJuego();
+            juego.ultimoTiempo = marcaDeTiempo;
+            document.getElementById("estadoJuego").textContent =
+                "Obstáculos: " + juego.obstaculosSuperados + "/50";
+            if (hayChoqueConObstaculo()) {
+                terminarJuego(false);
+                return;
+            }
+            juego.animacion = requestAnimationFrame(actualizarJuego);
+
+        }
+
+
+        function prepararVictoria(zona) {
+
+            juego.activo = false;
+            var inicioX = juego.x;
+            var inicioY = juego.y;
+            var centroX = zona.clientWidth / 2 - 21;
+            var centroY = zona.clientHeight / 2 - 21;
+            var inicioAnimacion = performance.now();
+            var duracion = 800;
+
+            document.getElementById("estadoJuego").textContent =
+                "🏁 ¡Superaste el obstáculo 50! Llegando al centro...";
+
+            function animarAlCentro(marcaDeTiempo) {
+                var progreso = Math.min((marcaDeTiempo - inicioAnimacion) / duracion, 1);
+                var suavizado = 1 - Math.pow(1 - progreso, 3);
+
+                juego.x = inicioX + (centroX - inicioX) * suavizado;
+                juego.y = inicioY + (centroY - inicioY) * suavizado;
+                dibujarJuego();
+
+                if (progreso < 1) {
+                    juego.animacionVictoria = requestAnimationFrame(animarAlCentro);
+                    return;
+                }
+
+                document.getElementById("estadoJuego").textContent =
+                    "🏁 ¡Gota centrada! Espera 3 segundos...";
+                juego.esperaVictoria = setTimeout(function () {
+                    document.getElementById("estadoJuego").textContent = "🏁 ¡Victoria en 1 segundo!";
+                    juego.cuentaVictoria = setTimeout(function () {
+                        terminarJuego(true);
+                    }, 1000);
+                }, 3000);
+            }
+
+            juego.animacionVictoria = requestAnimationFrame(animarAlCentro);
+
+        }
+
+
+        function crearObstaculo(zona) {
+
+            var altura = 60 + Math.random() * 45;
+            var desdeArriba = Math.random() < 0.5;
+            var obstaculo = document.createElement("div");
+            obstaculo.className = "obstaculo";
+            juego.obstaculoNumero++;
+            if (juego.obstaculoNumero % 10 === 0) {
+                obstaculo.classList.add("grande");
+                altura = zona.clientHeight * 0.5;
+            }
+            if (desdeArriba) {
+                obstaculo.classList.add("desde-arriba");
+            }
+            obstaculo.setAttribute("aria-label", "Obstáculo");
+            obstaculo.style.height = altura + "px";
+            zona.appendChild(obstaculo);
+
+            juego.obstaculos.push({
+                elemento: obstaculo,
+                x: zona.clientWidth + 10,
+                y: desdeArriba ? 0 : zona.clientHeight - altura - 12
+            });
+
+        }
+
+
+        function hayChoqueConObstaculo() {
+
+            return juego.obstaculos.some(function (obstaculo) {
+                var ancho = Number.parseFloat(getComputedStyle(obstaculo.elemento).width);
+                return juego.x < obstaculo.x + ancho &&
+                    juego.x + 72 > obstaculo.x &&
+                    juego.y < obstaculo.y + Number.parseFloat(obstaculo.elemento.style.height) &&
+                    juego.y + 48 > obstaculo.y;
+            });
+
+        }
+
+
+        function dibujarJuego() {
+
+            document.getElementById("jugador").style.transform =
+                "translate(" + juego.x + "px, " + juego.y + "px)";
+
+        }
+
+
+        function terminarJuego(gano) {
+
+            juego.activo = false;
+            clearInterval(juego.reloj);
+            document.getElementById("estadoJuego").textContent = gano
+                ? "🌊 ¡Ganaste! La gota llegó a salvo."
+                : "☁️ ¡La nube te alcanzó! Inténtalo otra vez.";
+
+        }
+
+
+        document.addEventListener("keydown", function (evento) {
+            if (juego && ["ArrowUp", "ArrowDown"].indexOf(evento.key) !== -1) {
+                evento.preventDefault();
+            }
+            if (juego) {
+                juego.teclas[evento.key] = true;
+                juego.teclas[evento.key.toLowerCase()] = true;
+            }
+        });
+
+        document.addEventListener("keyup", function (evento) {
+            if (juego) {
+                juego.teclas[evento.key] = false;
+                juego.teclas[evento.key.toLowerCase()] = false;
+            }
+        });
+
+
+        function actualizarProgreso() {
+
+            var acciones = document.querySelectorAll("#mision input:checked").length;
+            var barra = document.getElementById("barraProgreso");
+
+            barra.value = acciones;
+            document.getElementById("progresoTexto").textContent =
+                acciones + " de 4 acciones completadas";
+
+            if (acciones === 4) {
+                document.getElementById("progresoTexto").textContent =
+                    "🎉 ¡Misión completada! Cada gota cuenta.";
+            }
+
+        }
+
+
+        var preguntaActual = 0;
+        var puntos = 0;
+        var preguntas = [
+            {
+                texto: "¿Qué acción ahorra más agua?",
+                opciones: ["Cerrar el grifo", "Dejarlo abierto", "Jugar con agua"]
+            },
+            {
+                texto: "¿Qué debemos hacer con una fuga?",
+                opciones: ["Repararla", "Ignorarla", "Abrir más el grifo"]
+            },
+            {
+                texto: "¿Qué podemos reutilizar?",
+                opciones: ["Agua de lluvia", "Agua con basura", "Nada de agua"]
+            },
+            {
+                texto: "¿Cómo podemos ahorrar agua al bañarnos?",
+                opciones: ["Tomar una ducha corta", "Dejarnos el grifo abierto", "Llenar toda la bañera"]
+            },
+            {
+                texto: "¿Cuándo debemos cerrar el grifo?",
+                opciones: ["Al cepillarnos los dientes", "Nunca", "Solo cuando llueve"]
+            },
+            {
+                texto: "¿Por qué es importante cuidar el agua?",
+                opciones: ["Porque todos los seres vivos la necesitan", "Porque podemos desperdiciarla", "Porque no sirve para nada"]
+            }
+        ];
+
+        function mostrarPregunta() {
+
+            var pregunta = preguntas[preguntaActual];
+            var opciones = document.querySelector(".quiz-opciones");
+
+            document.getElementById("pregunta").textContent =
+                "Pregunta " + (preguntaActual + 1) + ": " + pregunta.texto;
+            opciones.innerHTML = "";
+
+            pregunta.opciones.forEach(function (opcion, indice) {
+                opciones.innerHTML +=
+                    '<button onclick="responderQuiz(' + indice + ')">' + opcion + '</button>';
+            });
+
+        }
+
+        function responderQuiz(opcion) {
+
+            var respuesta = document.getElementById("respuestaQuiz");
+
+            if (opcion === 0) {
+                puntos++;
+                respuesta.textContent = "✅ ¡Correcto!";
+            } else {
+                respuesta.textContent = "❌ Esa respuesta no es correcta.";
+            }
+
+            preguntaActual++;
+
+            if (preguntaActual < preguntas.length) {
+                mostrarPregunta();
+            } else {
+                document.getElementById("pregunta").textContent = "Quiz terminado";
+                document.querySelector(".quiz-opciones").innerHTML = "";
+                respuesta.textContent = "🏆 Tu puntuación: " + puntos + " de " + preguntas.length;
+
+                var porcentaje = Math.round((puntos / preguntas.length) * 100);
+                var barraAciertos = document.getElementById("barraAciertos");
+                var porcentajeAciertos = document.getElementById("porcentajeAciertos");
+
+                barraAciertos.value = porcentaje;
+                barraAciertos.hidden = false;
+                porcentajeAciertos.textContent = porcentaje + "% de aciertos";
+                porcentajeAciertos.hidden = false;
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>
