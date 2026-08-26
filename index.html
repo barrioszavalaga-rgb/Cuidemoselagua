@@ -482,6 +482,35 @@
             font-weight: bold;
         }
 
+        #mensaje.juego-activo:fullscreen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+            border: 0;
+            border-radius: 0;
+            background: #eefcff;
+        }
+
+        #mensaje.juego-activo:fullscreen #zonaPersecucion {
+            width: min(100%, 900px);
+            height: min(65vh, 520px);
+        }
+
+        .controles-juego {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .boton-pantalla-completa {
+            padding: 10px 18px;
+            font-size: 15px;
+        }
+
         .juego-instrucciones {
             margin: 0 0 12px;
             font-size: 18px;
@@ -591,6 +620,7 @@
             background: url("nube-transparente.png") center / contain no-repeat;
             mix-blend-mode: screen;
             pointer-events: none;
+            transform-origin: top left;
         }
 
         .nube-fondo.nube-2 {
@@ -620,6 +650,7 @@
             background: transparent;
             box-shadow: none;
             font-size: 0;
+            transform-origin: top left;
         }
 
         #jugador::before {
@@ -642,6 +673,7 @@
             border-radius: 8px 8px 3px 3px;
             background: repeating-linear-gradient(135deg, #f97316 0 10px, #fed7aa 10px 18px);
             box-shadow: 0 4px 0 rgba(154, 52, 18, .35);
+            transform-origin: top left;
         }
 
         .obstaculo.desde-arriba {
@@ -1180,11 +1212,50 @@
                     '<div id="jugador" class="personaje-juego" aria-label="Gota de agua">💧</div>' +
                 '</div>' +
                 '<p id="estadoJuego">Obstáculos: 0/50</p>' +
-                '<button id="reiniciarJuego" type="button" onclick="iniciarJuego()">🔄 Jugar de nuevo</button>';
+                '<div class="controles-juego">' +
+                    '<button id="reiniciarJuego" type="button" onclick="iniciarJuego()">🔄 Jugar de nuevo</button>' +
+                    '<button class="boton-pantalla-completa" type="button" onclick="alternarPantallaCompleta()" aria-label="Activar pantalla completa">⛶ Pantalla completa</button>' +
+                '</div>';
 
             iniciarJuego();
 
         }
+
+
+        function alternarPantallaCompleta() {
+
+            var mensaje = document.getElementById("mensaje");
+            if (!document.fullscreenElement) {
+                if (mensaje.requestFullscreen) {
+                    mensaje.requestFullscreen();
+                }
+                return;
+            }
+
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+
+        }
+
+
+        document.addEventListener("fullscreenchange", function () {
+
+            var boton = document.querySelector(".boton-pantalla-completa");
+            if (!boton) {
+                return;
+            }
+
+            var estaEnPantallaCompleta = Boolean(document.fullscreenElement);
+            ajustarEscalaJuego();
+            boton.textContent = estaEnPantallaCompleta
+                ? "⛶ Salir de pantalla completa"
+                : "⛶ Pantalla completa";
+            boton.setAttribute("aria-label", estaEnPantallaCompleta
+                ? "Salir de pantalla completa"
+                : "Activar pantalla completa");
+
+        });
 
 
         var juego = null;
@@ -1202,11 +1273,7 @@
             zona.classList.remove("juego-ganado");
 
             if (juego) {
-                clearInterval(juego.reloj);
-                cancelAnimationFrame(juego.animacion);
-                cancelAnimationFrame(juego.animacionVictoria);
-                clearTimeout(juego.esperaVictoria);
-                clearTimeout(juego.cuentaVictoria);
+                detenerJuegoActual();
             }
 
             zona.querySelectorAll(".obstaculo").forEach(function (obstaculo) {
@@ -1214,13 +1281,24 @@
             });
 
             juego = {
-                x: 24,
-                y: zona.clientHeight - 68,
+                escala: obtenerEscalaJuego(zona),
+                x: 24 * obtenerEscalaJuego(zona),
+                y: zona.clientHeight - 68 * obtenerEscalaJuego(zona),
                 distancia: 0,
                 nubesX: [zona.clientWidth + 20, zona.clientWidth + 300, zona.clientWidth + 580],
                 siguienteObstaculo: 220,
                 obstaculosSuperados: 0,
                 obstaculoNumero: 0,
+                patronesObstaculos: [
+                    { desdeArriba: false, porcentajeAltura: 0.28 },
+                    { desdeArriba: true, porcentajeAltura: 0.24 },
+                    { desdeArriba: false, porcentajeAltura: 0.36 },
+                    { desdeArriba: true, porcentajeAltura: 0.32 },
+                    { desdeArriba: false, porcentajeAltura: 0.22 },
+                    { desdeArriba: true, porcentajeAltura: 0.40 },
+                    { desdeArriba: false, porcentajeAltura: 0.34 },
+                    { desdeArriba: true, porcentajeAltura: 0.27 }
+                ],
                 obstaculos: [],
                 teclas: {},
                 punteroActivo: false,
@@ -1240,13 +1318,74 @@
             zona.onpointercancel = detenerControlConPuntero;
             nubes.forEach(function (nube, indice) {
                 nube.style.top = (15 + indice * 65 + Math.random() * 35) + "px";
-                nube.style.transform = "translate(" + juego.nubesX[indice] + "px, 0)";
+                nube.style.transform = "translate(" + juego.nubesX[indice] + "px, 0) scale(" + juego.escala + ")";
             });
             zona.focus();
             dibujarJuego();
             juego.animacion = requestAnimationFrame(actualizarJuego);
 
         }
+
+
+        function obtenerEscalaJuego(zona) {
+
+            if (!document.fullscreenElement) {
+                return 1;
+            }
+
+            var porcentajeAncho = zona.clientWidth / 680;
+            var porcentajeAlto = zona.clientHeight / 330;
+            var porcentajeDisponible = Math.min(porcentajeAncho, porcentajeAlto);
+
+            return Math.max(1, Math.min(2.2, porcentajeDisponible * 1.45));
+
+        }
+
+
+        function detenerJuegoActual() {
+
+            if (!juego) {
+                return;
+            }
+
+            juego.activo = false;
+            clearInterval(juego.reloj);
+            cancelAnimationFrame(juego.animacion);
+            cancelAnimationFrame(juego.animacionVictoria);
+            clearTimeout(juego.esperaVictoria);
+            clearTimeout(juego.cuentaVictoria);
+
+        }
+
+
+        function ajustarEscalaJuego() {
+
+            var zona = document.getElementById("zonaPersecucion");
+            if (!juego || !zona) {
+                return;
+            }
+
+            juego.escala = obtenerEscalaJuego(zona);
+            juego.y = Math.min(juego.y, zona.clientHeight - 46 * juego.escala);
+            dibujarJuego();
+            zona.querySelectorAll(".nube-fondo").forEach(function (nube, indice) {
+                nube.style.transform =
+                    "translate(" + juego.nubesX[indice] + "px, 0) scale(" + juego.escala + ")";
+            });
+            juego.obstaculos.forEach(function (obstaculo) {
+                var altura = zona.clientHeight * obstaculo.porcentajeAltura / juego.escala;
+                obstaculo.elemento.style.height = altura + "px";
+                obstaculo.y = obstaculo.desdeArriba
+                    ? 0
+                    : zona.clientHeight - altura * juego.escala;
+                obstaculo.elemento.style.transform =
+                    "translate(" + obstaculo.x + "px, " + obstaculo.y + "px) scale(" + juego.escala + ")";
+            });
+
+        }
+
+
+    window.addEventListener("resize", ajustarEscalaJuego);
 
 
         function actualizarJuego(marcaDeTiempo) {
@@ -1258,8 +1397,8 @@
             var zona = document.getElementById("zonaPersecucion");
             var nubes = zona.querySelectorAll(".nube-fondo");
             var delta = Math.min((marcaDeTiempo - juego.ultimoTiempo) / 16, 2);
-            var velocidad = 5 * delta;
-            var limiteY = zona.clientHeight - 46;
+            var velocidad = 5 * delta * juego.escala;
+            var limiteY = zona.clientHeight - 46 * juego.escala;
 
             juego.distancia += velocidad;
             var desplazamientoFondo = juego.distancia * 0.05;
@@ -1270,7 +1409,7 @@
                     nubes[indice].style.top = (15 + indice * 65 + Math.random() * 35) + "px";
                 }
                 nubes[indice].style.transform =
-                    "translate(" + juego.nubesX[indice] + "px, 0)";
+                    "translate(" + juego.nubesX[indice] + "px, 0) scale(" + juego.escala + ")";
             });
             zona.style.backgroundPosition = (-desplazamientoFondo) + "px bottom, center center";
             var desplazamientoFondo = juego.distancia * 0.05;
@@ -1294,10 +1433,11 @@
 
             juego.obstaculos.forEach(function (obstaculo) {
                 obstaculo.x -= velocidad;
-                obstaculo.elemento.style.transform = "translate(" + obstaculo.x + "px, " + obstaculo.y + "px)";
+                obstaculo.elemento.style.transform =
+                    "translate(" + obstaculo.x + "px, " + obstaculo.y + "px) scale(" + juego.escala + ")";
             });
             juego.obstaculos = juego.obstaculos.filter(function (obstaculo) {
-                if (obstaculo.x < -50) {
+                if (obstaculo.x < -50 * juego.escala) {
                     obstaculo.elemento.remove();
                     juego.obstaculosSuperados++;
                     if (juego.obstaculosSuperados >= 50) {
@@ -1368,14 +1508,19 @@
 
         function crearObstaculo(zona) {
 
-            var altura = 60 + Math.random() * 45;
-            var desdeArriba = Math.random() < 0.5;
+            var patron = juego.patronesObstaculos[
+                juego.obstaculoNumero % juego.patronesObstaculos.length
+            ];
+            var desdeArriba = patron.desdeArriba;
+            var porcentajeAltura = patron.porcentajeAltura;
+            var altura = zona.clientHeight * porcentajeAltura / juego.escala;
             var obstaculo = document.createElement("div");
             obstaculo.className = "obstaculo";
             juego.obstaculoNumero++;
             if (juego.obstaculoNumero % 10 === 0) {
                 obstaculo.classList.add("grande");
-                altura = zona.clientHeight * 0.5;
+                porcentajeAltura = 0.5;
+                altura = zona.clientHeight * 0.5 / juego.escala;
             }
             if (desdeArriba) {
                 obstaculo.classList.add("desde-arriba");
@@ -1386,8 +1531,12 @@
 
             juego.obstaculos.push({
                 elemento: obstaculo,
-                x: zona.clientWidth + 10,
-                y: desdeArriba ? 0 : zona.clientHeight - altura - 12
+                desdeArriba: desdeArriba,
+                porcentajeAltura: porcentajeAltura,
+                x: zona.clientWidth + 10 * juego.escala,
+                y: desdeArriba
+                    ? 0
+                    : zona.clientHeight - altura * juego.escala
             });
 
         }
@@ -1396,16 +1545,16 @@
         function hayChoqueConObstaculo() {
 
             var hitbox = {
-                x: juego.x + 12,
-                y: juego.y + 8,
-                ancho: 48,
-                alto: 32
+                x: juego.x + 12 * juego.escala,
+                y: juego.y + 8 * juego.escala,
+                ancho: 48 * juego.escala,
+                alto: 32 * juego.escala
             };
             return juego.obstaculos.some(function (obstaculo) {
-                var ancho = Number.parseFloat(getComputedStyle(obstaculo.elemento).width);
+                var ancho = Number.parseFloat(getComputedStyle(obstaculo.elemento).width) * juego.escala;
                 return hitbox.x < obstaculo.x + ancho &&
                     hitbox.x + hitbox.ancho > obstaculo.x &&
-                    hitbox.y < obstaculo.y + Number.parseFloat(obstaculo.elemento.style.height) &&
+                    hitbox.y < obstaculo.y + Number.parseFloat(obstaculo.elemento.style.height) * juego.escala &&
                     hitbox.y + hitbox.alto > obstaculo.y;
             });
 
@@ -1415,7 +1564,7 @@
         function dibujarJuego() {
 
             document.getElementById("jugador").style.transform =
-                "translate(" + juego.x + "px, " + juego.y + "px)";
+                "translate(" + juego.x + "px, " + juego.y + "px) scale(" + juego.escala + ")";
 
         }
 
@@ -1431,8 +1580,8 @@
             }
 
             var zona = document.getElementById("zonaPersecucion");
-            var limiteY = zona.clientHeight - 46;
-            var posicionY = evento.clientY - zona.getBoundingClientRect().top - 24;
+            var limiteY = zona.clientHeight - 46 * juego.escala;
+            var posicionY = evento.clientY - zona.getBoundingClientRect().top - 24 * juego.escala;
 
             juego.y = Math.max(0, Math.min(limiteY, posicionY));
             if (evento.type === "pointerdown") {
@@ -1460,7 +1609,7 @@
         function terminarJuego(gano) {
 
             juego.activo = false;
-            clearInterval(juego.reloj);
+            detenerJuegoActual();
             document.getElementById("zonaPersecucion").classList.toggle("juego-ganado", gano);
             document.getElementById("estadoJuego").textContent = gano
                 ? "🌊 ¡Ganaste! La gota llegó a salvo."
@@ -1585,4 +1734,3 @@
 
 </body>
 </html>
-
