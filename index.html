@@ -482,6 +482,29 @@
             font-weight: bold;
         }
 
+        @media (min-width: 700px) {
+            #mensaje.juego-activo {
+                margin-top: 38px;
+                padding: 26px 22px 18px;
+                max-width: 980px;
+            }
+
+            #zonaPersecucion {
+                width: min(100%, 820px);
+                height: clamp(360px, 35vw, 500px);
+                margin: 20px auto 18px;
+            }
+
+            .controles-juego {
+                margin-top: 14px;
+                gap: 14px;
+            }
+
+            .manual-juego {
+                max-width: 720px;
+            }
+        }
+
         #mensaje.juego-activo:fullscreen {
             display: flex;
             flex-direction: column;
@@ -1545,16 +1568,17 @@
         function hayChoqueConObstaculo() {
 
             var hitbox = {
-                x: juego.x + 12 * juego.escala,
-                y: juego.y + 8 * juego.escala,
-                ancho: 48 * juego.escala,
-                alto: 32 * juego.escala
+                x: juego.x + 29 * juego.escala,
+                y: juego.y + 18 * juego.escala,
+                ancho: 13 * juego.escala,
+                alto: 13 * juego.escala
             };
             return juego.obstaculos.some(function (obstaculo) {
                 var ancho = Number.parseFloat(getComputedStyle(obstaculo.elemento).width) * juego.escala;
+                var alto = Number.parseFloat(obstaculo.elemento.style.height) * juego.escala;
                 return hitbox.x < obstaculo.x + ancho &&
                     hitbox.x + hitbox.ancho > obstaculo.x &&
-                    hitbox.y < obstaculo.y + Number.parseFloat(obstaculo.elemento.style.height) * juego.escala &&
+                    hitbox.y < obstaculo.y + alto &&
                     hitbox.y + hitbox.alto > obstaculo.y;
             });
 
